@@ -1,20 +1,14 @@
 import pygame
 import random
-from pygame import mixer
 
 pygame.init()
-
 s_w = 800
 s_h = 800
-
 red = (255,0,0)
 green = (0,255,0)
 white = (0,0,0)
-
 win = pygame.display.set_mode((s_w, s_h))
 pygame.display.set_caption("snake by karl")
-
-
 
 clock = pygame.time.Clock()
 
