@@ -18,28 +18,23 @@ pygame.display.set_caption("snake by karl")
 
 clock = pygame.time.Clock()
 
-
+#function that renders each segment of the snake
 def snakeRender(snake):
     for part in snake:
         pygame.draw.rect(win, red, (part[0], part[1], 20,20))
-
+#function that renders the food
 def foodRender(foodPos):
     pygame.draw.rect(win, green, [foodPos[0], foodPos[1], 20, 20 ])
-
+#function that checks if food was eaten
 def foodEaten(foodPos, snake_head):
     if foodPos == snake_head:
         return True
-
-def drawGrid():
-    for x in range(0,800,20):
-        pygame.draw.line(win, white, (x, 0), (x, 800))
-    
-    for y in range(0,800,20):
-        pygame.draw.line(win, white, (0, y), (800, y))
-
+#function to check for collisions
 def collCheck(snake_head, snake):
+    #check if snake collided with self
     if snake_head in snake[2:]:
         main()
+    #check if snake hit edge of screen
     if snake_head[0] < 0:
         main()
     if snake_head[0] > s_w:
@@ -48,12 +43,12 @@ def collCheck(snake_head, snake):
         main()
     if snake_head[1] > s_h:
         main()
-
+#main loop
 def main():
     score = 0
     font = pygame.font.SysFont("bitstreamverasans", 25)
     text = font.render("score:" + str(score), True, (0, 0, 0))
-    pygame.mixer.music.load("bruh.wav")
+ 
     snake_head = [260,240]
     snake = [[260, 240]]
     foodPos = [random.randrange(0,s_w,20), random.randrange(0,s_h,20)]
@@ -90,13 +85,12 @@ def main():
         #inserts new piece at cords of head and removes last one
         snake.insert(0, (list(snake_head)))
         snake.pop()
-
         if foodEaten(foodPos, snake_head) == True:
             snake.insert(0, (list(snake_head)))
             foodPos = [random.randrange(0,s_w,20), random.randrange(0,s_h,20)]
             score += 1
             text = font.render("score:" + str(score), True, (255, 255, 255))
-
+        #update and draw everything on the screen
         win.fill((0,0,0))
         drawGrid()
         foodRender(foodPos)
