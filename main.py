@@ -92,7 +92,6 @@ def main():
             text = font.render("score:" + str(score), True, (255, 255, 255))
         #update and draw everything on the screen
         win.fill((0,0,0))
-        drawGrid()
         foodRender(foodPos)
         snakeRender(snake)
         collCheck(snake_head, snake)
