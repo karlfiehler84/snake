@@ -2,11 +2,13 @@ import pygame
 import random
 
 pygame.init()
+pause = True
 s_w = 800
 s_h = 800
 red = (255,0,0)
 green = (0,255,0)
 white = (0,0,0)
+otherGreen = (0,70,0)
 win = pygame.display.set_mode((s_w, s_h))
 pygame.display.set_caption("snake by karl")
 
@@ -42,11 +44,10 @@ def main():
     score = 0
     font = pygame.font.SysFont("bitstreamverasans", 25)
     text = font.render("score:" + str(score), True, (0, 0, 0))
- 
+
     snake_head = [260,240]
     snake = [[260, 240]]
-    foodPos = [random.randrange(0,s_w,20), random.randrange(0,s_h,20)]
-
+    foodPos = [random.randrange(20,s_w,20), random.randrange(20,s_h,20)]
     dir = "UP"
     while True:
         clock.tick(15)
@@ -54,6 +55,9 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pause(pause)
         keys = pygame.key.get_pressed()
 
         #sets direction of snake
@@ -65,6 +69,7 @@ def main():
             dir = "RIGHT"
         elif keys[pygame.K_LEFT]  and dir != "RIGHT":
             dir = "LEFT"
+        #make snake longer without food (for fun) 
         if keys[pygame.K_SPACE]:
             snake.insert(0, (list(snake_head)))
         #moves head of snake into dir
@@ -79,17 +84,37 @@ def main():
         #inserts new piece at cords of head and removes last one
         snake.insert(0, (list(snake_head)))
         snake.pop()
-        if foodEaten(foodPos, snake_head) == True:
+        if foodEaten(foodPos, snake_head):
             snake.insert(0, (list(snake_head)))
-            foodPos = [random.randrange(0,s_w,20), random.randrange(0,s_h,20)]
+            foodPos = [random.randrange(20,s_w,20), random.randrange(20,s_h,20)]
             score += 1
-            text = font.render("score:" + str(score), True, (255, 255, 255))
+            text = font.render("score: " + str(score), True, (255, 255, 255))
+        else:
+            if score < 1:
+                text = font.render("score: 0", True, (255,255,255))
         #update and draw everything on the screen
-        win.fill((0,0,0))
+        win.fill(otherGreen)
         foodRender(foodPos)
         snakeRender(snake)
         collCheck(snake_head, snake)
         win.blit(text, (0,0))
         pygame.display.update()
 
+def pause(pause):
+    font = pygame.font.SysFont("bitstreamverasans", 60)
+    text = font.render("paused", True, (0, 0, 0))
+    #create pause game loop while pause condition
+    while pause:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pause = False
+            #render the pause screen
+            win.fill((255,255,255))
+            win.blit(text, (400,400))
+            pygame.display.update()
+#run the game
 main()
