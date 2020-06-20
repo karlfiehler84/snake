@@ -7,11 +7,11 @@ s_w = 800
 s_h = 800
 red = (255,0,0)
 green = (0,255,0)
-white = (0,0,0)
+black = (0,0,0)
 otherGreen = (0,70,0)
+
 win = pygame.display.set_mode((s_w, s_h))
 pygame.display.set_caption("snake by karl")
-
 clock = pygame.time.Clock()
 
 #function that renders each segment of the snake
@@ -72,6 +72,7 @@ def main():
         #make snake longer without food (for fun) 
         if keys[pygame.K_SPACE]:
             snake.insert(0, (list(snake_head)))
+            score += 1
         #moves head of snake into dir
         if dir == "UP":
             snake_head[1] -= 20
@@ -103,6 +104,7 @@ def main():
 def pause(pause):
     font = pygame.font.SysFont("bitstreamverasans", 60)
     text = font.render("paused", True, (0, 0, 0))
+    text2 = font.render("press ESC to unpause", True, (0, 0, 0))
     #create pause game loop while pause condition
     while pause:
         for event in pygame.event.get():
@@ -114,7 +116,8 @@ def pause(pause):
                     pause = False
             #render the pause screen
             win.fill((255,255,255))
-            win.blit(text, (400,400))
+            win.blit(text, (302 ,400 - text.get_height()))
+            win.blit(text2, (101 ,468 - text.get_height()))
             pygame.display.update()
-#run the game
+
 main()
